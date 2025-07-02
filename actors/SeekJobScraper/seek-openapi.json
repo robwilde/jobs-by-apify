@@ -1,0 +1,2607 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Seek Job Scraper",
+    "description": "Scrape job listings from seek.com.au with ease! This actor extracts detailed job information based on customizable search parameters, returning results in structured JSON format. Perfect for lead generation, market research, or job seekers.",
+    "version": "v1.0",
+    "x-build-id": "QorQ5MY1hYl6IeVyf"
+  },
+  "servers": [
+    {
+      "url": "https://api.apify.com/v2"
+    }
+  ],
+  "paths": {
+    "/acts/websift~seek-job-scraper/run-sync-get-dataset-items": {
+      "post": {
+        "operationId": "run-sync-get-dataset-items-websift-seek-job-scraper",
+        "x-openai-isConsequential": false,
+        "summary": "Executes an Actor, waits for its completion, and returns Actor's dataset items in response.",
+        "tags": [
+          "Run Actor"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/inputSchema"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Enter your Apify token here"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/acts/websift~seek-job-scraper/runs": {
+      "post": {
+        "operationId": "runs-sync-websift-seek-job-scraper",
+        "x-openai-isConsequential": false,
+        "summary": "Executes an Actor and returns information about the initiated run in response.",
+        "tags": [
+          "Run Actor"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/inputSchema"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Enter your Apify token here"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/runsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/acts/websift~seek-job-scraper/run-sync": {
+      "post": {
+        "operationId": "run-sync-websift-seek-job-scraper",
+        "x-openai-isConsequential": false,
+        "summary": "Executes an Actor, waits for completion, and returns the OUTPUT from Key-value store in response.",
+        "tags": [
+          "Run Actor"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/inputSchema"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Enter your Apify token here"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "searchTerm": {
+            "title": "Search term",
+            "type": "string",
+            "description": "Job title or keyword to search for."
+          },
+          "maxResults": {
+            "title": "Maximum results",
+            "maximum": 550,
+            "type": "integer",
+            "description": "The maximum number of job listings to return.",
+            "default": 200
+          },
+          "requireEmail": {
+            "title": "Require an Email",
+            "type": "boolean",
+            "description": "Requires an Email to be in the listing"
+          },
+          "requirePhone": {
+            "title": "Require a Phone Number",
+            "type": "boolean",
+            "description": "Requires a Phone Number to be in the listing"
+          },
+          "requireEmailPhone": {
+            "title": "Require an Email and Phone Number",
+            "type": "boolean",
+            "description": "Requires both and email and phone number in the listing"
+          },
+          "includeOneInTitle": {
+            "title": "Include One In Title",
+            "type": "array",
+            "description": "Include at least one of these words in the title",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sortBy": {
+            "title": "Sort by",
+            "enum": [
+              "ListedDate",
+              "KeywordRelevance"
+            ],
+            "type": "string",
+            "description": "Sort order for job listings.",
+            "default": "ListedDate"
+          },
+          "dateRange": {
+            "title": "Date Range",
+            "maximum": 365,
+            "type": "integer",
+            "description": "Specifies the age of the oldest job posting in days, defaulting to 31 days."
+          },
+          "salaryType": {
+            "title": "Salary Type",
+            "enum": [
+              "Annual",
+              "Monthly",
+              "Hourly"
+            ],
+            "type": "string",
+            "description": "Select the salary format (Annual, Monthly, or Hourly) for job posting filtering."
+          },
+          "salaryMin": {
+            "title": "Minimum Salary",
+            "minimum": 0,
+            "type": "integer",
+            "description": "Set the lowest acceptable salary (in AUD) for job posting results."
+          },
+          "salaryMax": {
+            "title": "Maximum Salary",
+            "maximum": 100000000,
+            "type": "integer",
+            "description": "Set the highest acceptable salary (in AUD) for job posting results."
+          },
+          "suburbOrCity": {
+            "title": "Suburb or City",
+            "type": "string",
+            "description": "The suburb or city for the job location."
+          },
+          "state": {
+            "title": "State",
+            "type": "string",
+            "description": "The state for the job location."
+          },
+          "postCode": {
+            "title": "Postcode",
+            "type": "string",
+            "description": "The postcode for the job location."
+          },
+          "radius": {
+            "title": "Radius",
+            "maximum": 500,
+            "type": "integer",
+            "description": "Radius in kilometers for job search."
+          },
+          "workTypes": {
+            "title": "Filter job postings based on work types",
+            "type": "array",
+            "description": "Filter job postings based on work types",
+            "items": {
+              "type": "string",
+              "enum": [
+                "fulltime",
+                "parttime",
+                "contract",
+                "casual"
+              ],
+              "enumTitles": [
+                "Full Time",
+                "Part Time",
+                "Contract",
+                "Casual"
+              ]
+            }
+          },
+          "workArrangements": {
+            "title": "Filter job postings based on work arrangements",
+            "type": "array",
+            "description": "Filter job postings based on work arrangements",
+            "items": {
+              "type": "string",
+              "enum": [
+                "on-site",
+                "hybrid",
+                "remote"
+              ],
+              "enumTitles": [
+                "On-site",
+                "Hybrid",
+                "Remote"
+              ]
+            }
+          },
+          "accounting": {
+            "title": "All Accounting Subclasses",
+            "type": "boolean",
+            "description": "Include all accounting subcategories in job search."
+          },
+          "accounts-officers-clerks": {
+            "title": "Accounts Officers & Clerks",
+            "type": "boolean",
+            "description": "Filter jobs for accounts officers, clerks, and administrative roles."
+          },
+          "accounts-payable": {
+            "title": "Accounts Payable",
+            "type": "boolean",
+            "description": "Search for jobs focused on managing company expenses and payments."
+          },
+          "accounts-receivable-credit-control": {
+            "title": "Accounts Receivable & Credit Control",
+            "type": "boolean",
+            "description": "Filter jobs handling customer invoicing and credit management."
+          },
+          "analysis-reporting": {
+            "title": "Analysis & Reporting",
+            "type": "boolean",
+            "description": "Search for jobs involving financial analysis, budgeting, and reporting."
+          },
+          "assistant-accountants": {
+            "title": "Assistant Accountants",
+            "type": "boolean",
+            "description": "Filter jobs for entry-level or support roles in accounting."
+          },
+          "audit-external": {
+            "title": "Audit External",
+            "type": "boolean",
+            "description": "Filter jobs for external audit roles, ensuring company compliance."
+          },
+          "audit-internal": {
+            "title": "Audit Internal",
+            "type": "boolean",
+            "description": "Filter jobs for internal audit roles, evaluating company processes."
+          },
+          "bookkeeping-small-practice-accounting": {
+            "title": "Bookkeeping & Small Practice Accounting",
+            "type": "boolean",
+            "description": "Search for bookkeeping and small accounting firm jobs."
+          },
+          "business-services-corporate-advisory": {
+            "title": "Business Services & Corporate Advisory",
+            "type": "boolean",
+            "description": "Filter jobs providing business advice and corporate services."
+          },
+          "company-secretaries": {
+            "title": "Company Secretaries",
+            "type": "boolean",
+            "description": "Search for company secretary jobs, handling governance and compliance."
+          },
+          "compliance-risk": {
+            "title": "Compliance & Risk",
+            "type": "boolean",
+            "description": "Filter jobs managing company compliance and mitigating risk."
+          },
+          "cost-accounting": {
+            "title": "Cost Accounting",
+            "type": "boolean",
+            "description": "Filter jobs analyzing and managing company costs."
+          },
+          "financial-accounting-reporting": {
+            "title": "Financial Accounting & Reporting",
+            "type": "boolean",
+            "description": "Search for jobs preparing financial statements and reports."
+          },
+          "financial-managers-controllers": {
+            "title": "Financial Managers & Controllers",
+            "type": "boolean",
+            "description": "Filter jobs overseeing financial strategy and operations."
+          },
+          "forensic-accounting-investigation": {
+            "title": "Forensic Accounting & Investigation",
+            "type": "boolean",
+            "description": "Search for jobs investigating financial irregularities and disputes."
+          },
+          "insolvency-corporate-recovery": {
+            "title": "Insolvency & Corporate Recovery",
+            "type": "boolean",
+            "description": "Filter jobs handling company insolvency and restructuring."
+          },
+          "inventory-fixed-assets": {
+            "title": "Inventory & Fixed Assets",
+            "type": "boolean",
+            "description": "Search for jobs managing inventory and fixed asset accounting."
+          },
+          "management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter jobs in accounting management and leadership."
+          },
+          "management-accounting-budgeting": {
+            "title": "Management Accounting & Budgeting",
+            "type": "boolean",
+            "description": "Search for jobs analyzing financial data for business decisions."
+          },
+          "payroll": {
+            "title": "Payroll",
+            "type": "boolean",
+            "description": "Filter jobs handling employee payroll and benefits administration."
+          },
+          "strategy-planning": {
+            "title": "Strategy & Planning",
+            "type": "boolean",
+            "description": "Filter jobs developing and implementing business strategies."
+          },
+          "systems-accounting-it-audit": {
+            "title": "Systems Accounting & IT Audit",
+            "type": "boolean",
+            "description": "Search for jobs evaluating accounting systems and IT controls."
+          },
+          "taxation": {
+            "title": "Taxation",
+            "type": "boolean",
+            "description": "Filter jobs handling tax planning, compliance, and advisory services."
+          },
+          "treasury": {
+            "title": "Treasury",
+            "type": "boolean",
+            "description": "Search for jobs managing company finances, cash flow, and investments."
+          },
+          "other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter jobs that don't fit into specific accounting categories."
+          },
+          "administration-office-support": {
+            "title": "All Administration Office Support Subclasses",
+            "type": "boolean",
+            "description": "Include all administration and office support subcategories."
+          },
+          "administrative-assistants": {
+            "title": "Administrative Assistants",
+            "type": "boolean",
+            "description": "Filter jobs providing administrative support to teams or executives."
+          },
+          "client-sales-administration": {
+            "title": "Client Sales Administration",
+            "type": "boolean",
+            "description": "Search for jobs handling client sales, orders, and administrative tasks."
+          },
+          "contracts-administration": {
+            "title": "Contracts Administration",
+            "type": "boolean",
+            "description": "Filter jobs managing contracts, agreements, and compliance."
+          },
+          "data-entry-word-processing": {
+            "title": "Data Entry & Word Processing",
+            "type": "boolean",
+            "description": "Search for jobs entering data, preparing documents, and performing clerical tasks."
+          },
+          "office-management": {
+            "title": "Office Management",
+            "type": "boolean",
+            "description": "Filter jobs overseeing office operations, staff, and resources."
+          },
+          "pa-ea-secretarial": {
+            "title": "PA/EA & Secretarial",
+            "type": "boolean",
+            "description": "Search for jobs providing executive-level administrative support."
+          },
+          "receptionists": {
+            "title": "Receptionists",
+            "type": "boolean",
+            "description": "Filter jobs handling front desk, customer service, and phone duties."
+          },
+          "records-management-document-control": {
+            "title": "Records Management & Document Control",
+            "type": "boolean",
+            "description": "Search for jobs managing company records, files, and documentation."
+          },
+          "administration-office-support-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter administration and office support jobs that don't fit specific categories."
+          },
+          "advertising-arts-media": {
+            "title": "All Advertising Arts Media Subclasses",
+            "type": "boolean",
+            "description": "Include all advertising, arts, and media subcategories."
+          },
+          "agency-account-management": {
+            "title": "Agency Account Management",
+            "type": "boolean",
+            "description": "Filter jobs managing client relationships at advertising agencies."
+          },
+          "art-direction": {
+            "title": "Art Direction",
+            "type": "boolean",
+            "description": "Search for jobs leading visual creative direction in advertising."
+          },
+          "editing-publishing": {
+            "title": "Editing & Publishing",
+            "type": "boolean",
+            "description": "Filter jobs in editing, publishing, and content creation."
+          },
+          "advertising-arts-media-event-management": {
+            "title": "Event Management",
+            "type": "boolean",
+            "description": "Search for jobs planning and executing events and activations."
+          },
+          "journalism-writing": {
+            "title": "Journalism & Writing",
+            "type": "boolean",
+            "description": "Filter jobs in journalism, writing, and content creation."
+          },
+          "advertising-arts-media-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Search for management jobs in advertising, arts, and media."
+          },
+          "media-strategy-planning-buying": {
+            "title": "Media Strategy, Planning & Buying",
+            "type": "boolean",
+            "description": "Filter jobs developing media plans and buying ad space."
+          },
+          "performing-arts": {
+            "title": "Performing Arts",
+            "type": "boolean",
+            "description": "Search for jobs in theater, dance, music, and other performing arts."
+          },
+          "photography": {
+            "title": "Photography",
+            "type": "boolean",
+            "description": "Filter jobs in photography for advertising, editorial, and commercial use."
+          },
+          "programming-production": {
+            "title": "Programming & Production",
+            "type": "boolean",
+            "description": "Search for jobs in TV, film, and digital content production."
+          },
+          "promotions": {
+            "title": "Promotions",
+            "type": "boolean",
+            "description": "Filter jobs creating promotional materials and campaigns."
+          },
+          "advertising-arts-media-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter advertising, arts, and media jobs that don't fit specific categories."
+          },
+          "banking-financial-services": {
+            "title": "All Banking Financial Services Subclasses",
+            "type": "boolean",
+            "description": "Include all banking and financial services subcategories."
+          },
+          "account-relationship-management": {
+            "title": "Account Relationship Management",
+            "type": "boolean",
+            "description": "Filter jobs managing client relationships in banking."
+          },
+          "banking-financial-services-analysis-reporting": {
+            "title": "Analysis & Reporting",
+            "type": "boolean",
+            "description": "Search for jobs analyzing financial data and creating reports."
+          },
+          "banking-business": {
+            "title": "Banking Business",
+            "type": "boolean",
+            "description": "Filter jobs in business banking, lending, and finance."
+          },
+          "banking-corporate-institutional": {
+            "title": "Banking Corporate & Institutional",
+            "type": "boolean",
+            "description": "Search for jobs serving corporate and institutional clients."
+          },
+          "banking-retail-branch": {
+            "title": "Banking Retail & Branch",
+            "type": "boolean",
+            "description": "Filter jobs in retail banking, branch management, and customer service."
+          },
+          "client-services": {
+            "title": "Client Services",
+            "type": "boolean",
+            "description": "Search for jobs providing service and support to banking clients."
+          },
+          "banking-financial-services-compliance-risk": {
+            "title": "Compliance & Risk",
+            "type": "boolean",
+            "description": "Filter jobs ensuring regulatory compliance and managing financial risk."
+          },
+          "corporate-finance-investment-banking": {
+            "title": "Corporate Finance & Investment Banking",
+            "type": "boolean",
+            "description": "Search for jobs advising on mergers, acquisitions, and corporate finance."
+          },
+          "credit": {
+            "title": "Credit",
+            "type": "boolean",
+            "description": "Filter jobs evaluating and managing credit risk and lending."
+          },
+          "financial-planning": {
+            "title": "Financial Planning",
+            "type": "boolean",
+            "description": "Search for jobs creating personalized financial plans for clients."
+          },
+          "funds-management": {
+            "title": "Funds Management",
+            "type": "boolean",
+            "description": "Filter jobs managing investment portfolios and funds."
+          },
+          "banking-financial-services-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Search for management jobs in banking and financial services."
+          },
+          "mortgages": {
+            "title": "Mortgages",
+            "type": "boolean",
+            "description": "Filter jobs originating, processing, and servicing mortgages."
+          },
+          "settlements": {
+            "title": "Settlements",
+            "type": "boolean",
+            "description": "Search for jobs facilitating financial transactions and settlements."
+          },
+          "stockbroking-trading": {
+            "title": "Stockbroking & Trading",
+            "type": "boolean",
+            "description": "Filter jobs buying and selling securities, stocks, and bonds."
+          },
+          "banking-financial-services-treasury": {
+            "title": "Treasury",
+            "type": "boolean",
+            "description": "Search for jobs managing company finances, cash flow, and investments."
+          },
+          "banking-financial-services-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter banking and financial services jobs that don't fit specific categories."
+          },
+          "call-centre-customer-service": {
+            "title": "All Call Centre Customer Service Subclasses",
+            "type": "boolean",
+            "description": "Include all call centre and customer service subcategories."
+          },
+          "collections": {
+            "title": "Collections",
+            "type": "boolean",
+            "description": "Filter jobs recovering debts and managing collections processes."
+          },
+          "customer-service-call-centre": {
+            "title": "Customer Service Call Centre",
+            "type": "boolean",
+            "description": "Search for jobs handling customer inquiries and support via phone."
+          },
+          "customer-service-customer-facing": {
+            "title": "Customer Service & Customer Facing",
+            "type": "boolean",
+            "description": "Filter jobs interacting with customers, providing support and resolving issues."
+          },
+          "management-support": {
+            "title": "Management Support",
+            "type": "boolean",
+            "description": "Search for jobs assisting managers, teams, and organizational operations."
+          },
+          "sales-inbound": {
+            "title": "Sales Inbound",
+            "type": "boolean",
+            "description": "Filter jobs handling incoming sales calls and customer inquiries."
+          },
+          "sales-outbound": {
+            "title": "Sales Outbound",
+            "type": "boolean",
+            "description": "Search for jobs generating sales leads and contacting potential customers."
+          },
+          "supervisors-team-leaders": {
+            "title": "Supervisors & Team Leaders",
+            "type": "boolean",
+            "description": "Filter jobs leading teams, supervising staff, and overseeing operations."
+          },
+          "call-centre-customer-service-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter call centre and customer service jobs that don't fit specific categories."
+          },
+          "ceo-general-management": {
+            "title": "All Ceo General Management Subclasses",
+            "type": "boolean",
+            "description": "Include all CEO and general management subcategories."
+          },
+          "board-appointments": {
+            "title": "Board Appointments",
+            "type": "boolean",
+            "description": "Filter jobs serving on company boards, directing strategy and governance."
+          },
+          "ceo": {
+            "title": "CEO",
+            "type": "boolean",
+            "description": "Search for jobs as chief executive officers, leading companies and organizations."
+          },
+          "coo-md": {
+            "title": "COO/MD",
+            "type": "boolean",
+            "description": "Filter jobs as chief operating officers or managing directors."
+          },
+          "general-business-unit-manager": {
+            "title": "General Business Unit Manager",
+            "type": "boolean",
+            "description": "Search for jobs overseeing business units, departments, or functions."
+          },
+          "ceo-general-management-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter CEO and general management jobs that don't fit specific categories."
+          },
+          "community-services-development": {
+            "title": "All Community Services Development Subclasses",
+            "type": "boolean",
+            "description": "Include all community services and development subcategories."
+          },
+          "aged-disability-support": {
+            "title": "Aged & Disability Support",
+            "type": "boolean",
+            "description": "Filter jobs providing care and support for aged and disabled individuals."
+          },
+          "child-welfare-youth-family-services": {
+            "title": "Child Welfare & Youth Family Services",
+            "type": "boolean",
+            "description": "Search for jobs supporting children, youth, and families in need."
+          },
+          "community-development": {
+            "title": "Community Development",
+            "type": "boolean",
+            "description": "Filter jobs promoting community growth, social justice, and empowerment."
+          },
+          "employment-services": {
+            "title": "Employment Services",
+            "type": "boolean",
+            "description": "Filter jobs providing employment support, training, and job placement services."
+          },
+          "fundraising": {
+            "title": "Fundraising",
+            "type": "boolean",
+            "description": "Search for jobs securing donations and sponsorships for community organizations."
+          },
+          "housing-homelessness-services": {
+            "title": "Housing & Homelessness Services",
+            "type": "boolean",
+            "description": "Filter jobs providing housing support, advocacy, and homelessness services."
+          },
+          "indigenous-multicultural-services": {
+            "title": "Indigenous & Multicultural Services",
+            "type": "boolean",
+            "description": "Search for jobs supporting Indigenous and multicultural communities."
+          },
+          "community-services-development-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter management jobs in community services and development."
+          },
+          "volunteer-coordination-support": {
+            "title": "Volunteer Coordination & Support",
+            "type": "boolean",
+            "description": "Search for jobs managing volunteer programs and supporting community engagement."
+          },
+          "community-services-development-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter community services and development jobs that don't fit specific categories."
+          },
+          "construction": {
+            "title": "All Construction Subclasses",
+            "type": "boolean",
+            "description": "Include all construction subcategories."
+          },
+          "contracts-management": {
+            "title": "Contracts Management",
+            "type": "boolean",
+            "description": "Filter jobs managing construction contracts, negotiations, and agreements."
+          },
+          "estimating": {
+            "title": "Estimating",
+            "type": "boolean",
+            "description": "Search for jobs calculating construction costs, quotes, and tenders."
+          },
+          "foreperson-supervisors": {
+            "title": "Foreperson & Supervisors",
+            "type": "boolean",
+            "description": "Filter jobs overseeing construction sites, teams, and operations."
+          },
+          "construction-health-safety-environment": {
+            "title": "Health, Safety & Environment",
+            "type": "boolean",
+            "description": "Search for jobs ensuring construction site safety, compliance, and sustainability."
+          },
+          "construction-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter jobs overseeing construction projects, teams, and operations."
+          },
+          "planning-scheduling": {
+            "title": "Planning & Scheduling",
+            "type": "boolean",
+            "description": "Search for jobs coordinating construction timelines, budgets, and resources."
+          },
+          "plant-machinery-operators": {
+            "title": "Plant & Machinery Operators",
+            "type": "boolean",
+            "description": "Filter jobs operating heavy machinery, equipment, and vehicles."
+          },
+          "construction-project-management": {
+            "title": "Project Management",
+            "type": "boolean",
+            "description": "Search for jobs managing construction projects from planning to completion."
+          },
+          "construction-quality-assurance-control": {
+            "title": "Quality Assurance & Control",
+            "type": "boolean",
+            "description": "Filter jobs ensuring construction quality, safety, and compliance."
+          },
+          "construction-surveying": {
+            "title": "Surveying",
+            "type": "boolean",
+            "description": "Search for jobs conducting site surveys, mapping, and geological assessments."
+          },
+          "construction-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter construction jobs that don't fit specific categories."
+          },
+          "consulting-strategy": {
+            "title": "All Consulting Strategy Subclasses",
+            "type": "boolean",
+            "description": "Include all consulting and strategy subcategories."
+          },
+          "consulting-strategy-analysts": {
+            "title": "Analysts",
+            "type": "boolean",
+            "description": "Filter jobs analyzing data, identifying trends, and informing business strategies."
+          },
+          "corporate-development": {
+            "title": "Corporate Development",
+            "type": "boolean",
+            "description": "Search for jobs driving business growth through M&A, partnerships, and innovation."
+          },
+          "environment-sustainability-consulting": {
+            "title": "Environment & Sustainability Consulting",
+            "type": "boolean",
+            "description": "Filter jobs advising on environmental sustainability, energy efficiency, and social responsibility."
+          },
+          "management-change-consulting": {
+            "title": "Management & Change Consulting",
+            "type": "boolean",
+            "description": "Search for jobs helping organizations adapt to change, improve performance, and optimize operations."
+          },
+          "policy": {
+            "title": "Policy",
+            "type": "boolean",
+            "description": "Filter jobs developing, implementing, and analyzing policies for organizations."
+          },
+          "consulting-strategy-planning": {
+            "title": "Strategy & Planning",
+            "type": "boolean",
+            "description": "Filter jobs developing and implementing business strategies and plans."
+          },
+          "consulting-strategy-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter consulting and strategy jobs that don't fit specific categories."
+          },
+          "design-architecture": {
+            "title": "All Design Architecture Subclasses",
+            "type": "boolean",
+            "description": "Include all design and architecture subcategories."
+          },
+          "architectural-drafting": {
+            "title": "Architectural Drafting",
+            "type": "boolean",
+            "description": "Filter jobs creating technical drawings and blueprints for buildings."
+          },
+          "architecture": {
+            "title": "Architecture",
+            "type": "boolean",
+            "description": "Search for jobs designing buildings, spaces, and environments."
+          },
+          "fashion-textile-design": {
+            "title": "Fashion & Textile Design",
+            "type": "boolean",
+            "description": "Filter jobs creating clothing, accessories, and textile designs."
+          },
+          "graphic-design": {
+            "title": "Graphic Design",
+            "type": "boolean",
+            "description": "Search for jobs designing visual communications, logos, and branding."
+          },
+          "illustration-animation": {
+            "title": "Illustration & Animation",
+            "type": "boolean",
+            "description": "Filter jobs creating illustrations, animations, and visual effects."
+          },
+          "industrial-design": {
+            "title": "Industrial Design",
+            "type": "boolean",
+            "description": "Search for jobs designing products, furniture, and equipment."
+          },
+          "interior-design": {
+            "title": "Interior Design",
+            "type": "boolean",
+            "description": "Filter jobs designing interior spaces, layouts, and aesthetics."
+          },
+          "landscape-architecture": {
+            "title": "Landscape Architecture",
+            "type": "boolean",
+            "description": "Search for jobs designing outdoor spaces, parks, and gardens."
+          },
+          "urban-design-planning": {
+            "title": "Urban Design & Planning",
+            "type": "boolean",
+            "description": "Filter jobs designing and planning cities, communities, and infrastructure."
+          },
+          "web-interaction-design": {
+            "title": "Web Interaction Design",
+            "type": "boolean",
+            "description": "Search for jobs designing user experiences and interfaces for websites."
+          },
+          "design-architecture-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter design and architecture jobs that don't fit specific categories."
+          },
+          "education-training": {
+            "title": "All Education Training Subclasses",
+            "type": "boolean",
+            "description": "Include all education and training subcategories."
+          },
+          "childcare-outside-school-hours-care": {
+            "title": "Childcare & Outside School Hours Care",
+            "type": "boolean",
+            "description": "Filter jobs providing childcare and supervision outside regular school hours."
+          },
+          "library-services-information-management": {
+            "title": "Library Services & Information Management",
+            "type": "boolean",
+            "description": "Search for jobs managing libraries, information systems, and digital resources."
+          },
+          "management-schools": {
+            "title": "Management in Schools",
+            "type": "boolean",
+            "description": "Filter jobs leading and administering schools, including principals and administrators."
+          },
+          "management-universities": {
+            "title": "Management in Universities",
+            "type": "boolean",
+            "description": "Search for jobs leading and administering universities, including vice-chancellors and department heads."
+          },
+          "management-vocational": {
+            "title": "Management in Vocational Education",
+            "type": "boolean",
+            "description": "Filter jobs leading and administering vocational education and training institutions."
+          },
+          "research-fellowships": {
+            "title": "Research Fellowships",
+            "type": "boolean",
+            "description": "Search for research positions and fellowships in various academic fields."
+          },
+          "student-services": {
+            "title": "Student Services",
+            "type": "boolean",
+            "description": "Filter jobs supporting student well-being, academic success, and campus life."
+          },
+          "teaching-early-childhood": {
+            "title": "Teaching Early Childhood",
+            "type": "boolean",
+            "description": "Search for jobs teaching children from birth to age 8, including kindergarten and preschool."
+          },
+          "teaching-primary": {
+            "title": "Teaching Primary",
+            "type": "boolean",
+            "description": "Filter jobs teaching students in primary schools (ages 5-11)."
+          },
+          "teaching-secondary": {
+            "title": "Teaching Secondary",
+            "type": "boolean",
+            "description": "Search for jobs teaching students in secondary schools (ages 11-18)."
+          },
+          "teaching-tertiary": {
+            "title": "Teaching Tertiary",
+            "type": "boolean",
+            "description": "Filter jobs teaching students in universities and colleges."
+          },
+          "teaching-vocational": {
+            "title": "Teaching Vocational",
+            "type": "boolean",
+            "description": "Search for jobs teaching technical and vocational skills in various industries."
+          },
+          "teaching-aides-special-needs": {
+            "title": "Teaching Aides & Special Needs",
+            "type": "boolean",
+            "description": "Filter jobs assisting teachers and supporting students with special needs."
+          },
+          "tutoring": {
+            "title": "Tutoring",
+            "type": "boolean",
+            "description": "Search for jobs providing one-on-one academic support and mentoring."
+          },
+          "workplace-training-assessment": {
+            "title": "Workplace Training & Assessment",
+            "type": "boolean",
+            "description": "Filter jobs providing training, evaluation, and skills assessment in workplace settings."
+          },
+          "education-training-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter education and training jobs that don't fit specific categories."
+          },
+          "engineering": {
+            "title": "All Engineering Subclasses",
+            "type": "boolean",
+            "description": "Include all engineering subcategories."
+          },
+          "aerospace-engineering": {
+            "title": "Aerospace Engineering",
+            "type": "boolean",
+            "description": "Search for jobs designing and developing aircraft, spacecraft, and missiles."
+          },
+          "automotive-engineering": {
+            "title": "Automotive Engineering",
+            "type": "boolean",
+            "description": "Filter jobs designing and developing vehicles, automotive systems, and components."
+          },
+          "building-services-engineering": {
+            "title": "Building Services Engineering",
+            "type": "boolean",
+            "description": "Search for jobs designing and maintaining building systems, including HVAC, electrical, and plumbing."
+          },
+          "chemical-engineering": {
+            "title": "Chemical Engineering",
+            "type": "boolean",
+            "description": "Filter jobs developing processes and systems for chemical manufacturing and production."
+          },
+          "civil-structural-engineering": {
+            "title": "Civil & Structural Engineering",
+            "type": "boolean",
+            "description": "Search for jobs designing and developing infrastructure, buildings, and structural systems."
+          },
+          "electrical-electronic-engineering": {
+            "title": "Electrical & Electronic Engineering",
+            "type": "boolean",
+            "description": "Filter jobs designing and developing electrical systems, electronics, and embedded systems."
+          },
+          "engineering-drafting": {
+            "title": "Engineering Drafting",
+            "type": "boolean",
+            "description": "Search for jobs creating technical drawings and models for engineering projects."
+          },
+          "environmental-engineering": {
+            "title": "Environmental Engineering",
+            "type": "boolean",
+            "description": "Filter jobs developing solutions for environmental issues, including air, water, and waste management."
+          },
+          "field-engineering": {
+            "title": "Field Engineering",
+            "type": "boolean",
+            "description": "Search for jobs installing, maintaining, and repairing equipment and systems in the field."
+          },
+          "industrial-engineering": {
+            "title": "Industrial Engineering",
+            "type": "boolean",
+            "description": "Filter jobs optimizing industrial processes, systems, and facilities."
+          },
+          "maintenance": {
+            "title": "Maintenance",
+            "type": "boolean",
+            "description": "Search for jobs maintaining and repairing equipment, machinery, and infrastructure."
+          },
+          "engineering-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter jobs leading and managing engineering teams, projects, and operations."
+          },
+          "materials-handling-engineering": {
+            "title": "Materials Handling Engineering",
+            "type": "boolean",
+            "description": "Search for jobs designing and developing systems for materials handling and logistics."
+          },
+          "mechanical-engineering": {
+            "title": "Mechanical Engineering",
+            "type": "boolean",
+            "description": "Filter jobs designing and developing mechanical systems, machines, and devices."
+          },
+          "process-engineering": {
+            "title": "Process Engineering",
+            "type": "boolean",
+            "description": "Search for jobs designing and optimizing industrial processes and systems."
+          },
+          "project-engineering": {
+            "title": "Project Engineering",
+            "type": "boolean",
+            "description": "Filter jobs managing and coordinating engineering projects from conception to completion."
+          },
+          "engineering-project-management": {
+            "title": "Project Management",
+            "type": "boolean",
+            "description": "Search for jobs overseeing engineering projects, ensuring timely and budget-friendly delivery."
+          },
+          "supervisors": {
+            "title": "Supervisors",
+            "type": "boolean",
+            "description": "Filter jobs supervising engineering teams, providing guidance and oversight."
+          },
+          "systems-engineering": {
+            "title": "Systems Engineering",
+            "type": "boolean",
+            "description": "Search for jobs designing, integrating, and managing complex engineering systems."
+          },
+          "water-waste-engineering": {
+            "title": "Water & Waste Engineering",
+            "type": "boolean",
+            "description": "Filter jobs developing solutions for water treatment, wastewater management, and waste disposal."
+          },
+          "engineering-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter engineering jobs that don't fit specific categories."
+          },
+          "farming-animals-conservation": {
+            "title": "All Farming Animals Conservation Subclasses",
+            "type": "boolean",
+            "description": "Include all farming, animals, and conservation subcategories."
+          },
+          "agronomy-farm-services": {
+            "title": "Agronomy & Farm Services",
+            "type": "boolean",
+            "description": "Search for jobs providing crop management, soil science, and farm support services."
+          },
+          "conservation-parks-wildlife": {
+            "title": "Conservation, Parks & Wildlife",
+            "type": "boolean",
+            "description": "Filter jobs preserving and protecting natural resources, parks, and wildlife."
+          },
+          "farm-labour": {
+            "title": "Farm Labour",
+            "type": "boolean",
+            "description": "Search for jobs performing manual labor on farms, including harvesting and livestock care."
+          },
+          "farm-management": {
+            "title": "Farm Management",
+            "type": "boolean",
+            "description": "Filter jobs overseeing farm operations, including planning, production, and finance."
+          },
+          "fishing-aquaculture": {
+            "title": "Fishing & Aquaculture",
+            "type": "boolean",
+            "description": "Search for jobs in fishing, seafood production, and aquatic animal farming."
+          },
+          "horticulture": {
+            "title": "Horticulture",
+            "type": "boolean",
+            "description": "Filter jobs cultivating and managing plants, gardens, and landscapes."
+          },
+          "veterinary-services-animal-welfare": {
+            "title": "Veterinary Services & Animal Welfare",
+            "type": "boolean",
+            "description": "Search for jobs providing veterinary care, animal health services, and welfare advocacy."
+          },
+          "winery-viticulture": {
+            "title": "Winery & Viticulture",
+            "type": "boolean",
+            "description": "Filter jobs in grape cultivation, wine production, and vineyard management."
+          },
+          "farming-animals-conservation-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter farming, animals, and conservation jobs that don't fit specific categories."
+          },
+          "government-defence": {
+            "title": "All Government Defence Subclasses",
+            "type": "boolean",
+            "description": "Include all government and defence subcategories."
+          },
+          "air-force": {
+            "title": "Air Force",
+            "type": "boolean",
+            "description": "Search for jobs in military aviation, including pilots, maintenance, and support personnel."
+          },
+          "army": {
+            "title": "Army",
+            "type": "boolean",
+            "description": "Search for jobs in the military's land-based branch, including combat, support, and administrative roles."
+          },
+          "emergency-services": {
+            "title": "Emergency Services",
+            "type": "boolean",
+            "description": "Filter jobs responding to emergencies, including firefighting, paramedicine, and disaster relief."
+          },
+          "government-federal": {
+            "title": "Government (Federal)",
+            "type": "boolean",
+            "description": "Search for jobs in federal government agencies, including administration, policy, and public services."
+          },
+          "government-local": {
+            "title": "Government (Local)",
+            "type": "boolean",
+            "description": "Filter jobs in local government, including city, county, or municipal administration and services."
+          },
+          "government-state": {
+            "title": "Government (State)",
+            "type": "boolean",
+            "description": "Search for jobs in state government agencies, including administration, policy, and public services."
+          },
+          "navy": {
+            "title": "Navy",
+            "type": "boolean",
+            "description": "Filter jobs in the military's naval branch, including combat, support, and administrative roles."
+          },
+          "police-corrections": {
+            "title": "Police & Corrections",
+            "type": "boolean",
+            "description": "Search for jobs in law enforcement, corrections, and criminal justice."
+          },
+          "policy-planning-regulation": {
+            "title": "Policy, Planning & Regulation",
+            "type": "boolean",
+            "description": "Filter jobs developing and implementing policies, plans, and regulations in government and industry."
+          },
+          "government-defence-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter government and defence jobs that don't fit specific categories."
+          },
+          "healthcare-medical": {
+            "title": "All Healthcare Medical Subclasses",
+            "type": "boolean",
+            "description": "Include all healthcare and medical subcategories."
+          },
+          "ambulance-paramedics": {
+            "title": "Ambulance & Paramedics",
+            "type": "boolean",
+            "description": "Search for jobs providing emergency medical services, transportation, and care."
+          },
+          "chiropractic-osteopathic": {
+            "title": "Chiropractic & Osteopathic",
+            "type": "boolean",
+            "description": "Filter jobs providing alternative medical treatments, including spinal manipulation and manual therapy."
+          },
+          "clinical-medical-research": {
+            "title": "Clinical & Medical Research",
+            "type": "boolean",
+            "description": "Search for jobs conducting studies, trials, and investigations to advance medical knowledge."
+          },
+          "dental": {
+            "title": "Dental",
+            "type": "boolean",
+            "description": "Filter jobs providing dental care, including diagnosis, treatment, and prevention."
+          },
+          "dieticians": {
+            "title": "Dieticians",
+            "type": "boolean",
+            "description": "Search for jobs promoting healthy eating habits, developing meal plans, and providing nutrition advice."
+          },
+          "environmental-services": {
+            "title": "Environmental Services",
+            "type": "boolean",
+            "description": "Filter jobs maintaining cleanliness, hygiene, and waste management in healthcare settings."
+          },
+          "general-practitioners": {
+            "title": "General Practitioners",
+            "type": "boolean",
+            "description": "Search for jobs providing primary care, routine check-ups, and referrals to specialists."
+          },
+          "healthcare-medical-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter jobs overseeing healthcare operations, including administration, finance, and strategy."
+          },
+          "medical-administration": {
+            "title": "Medical Administration",
+            "type": "boolean",
+            "description": "Search for jobs managing medical records, billing, and practice management."
+          },
+          "medical-imaging": {
+            "title": "Medical Imaging",
+            "type": "boolean",
+            "description": "Filter jobs using medical imaging technologies, such as MRI, CT, and X-ray, for diagnostic purposes."
+          },
+          "medical-specialists": {
+            "title": "Medical Specialists",
+            "type": "boolean",
+            "description": "Search for jobs specializing in specific medical fields, such as cardiology, oncology, or neurology."
+          },
+          "natural-therapies-alternative-medicine": {
+            "title": "Natural Therapies & Alternative Medicine",
+            "type": "boolean",
+            "description": "Filter jobs providing holistic and alternative medical treatments, including acupuncture, homeopathy, and herbalism."
+          },
+          "nursing-a-e-critical-care-icu": {
+            "title": "Nursing (A&E, Critical Care, ICU)",
+            "type": "boolean",
+            "description": "Search for jobs providing emergency, critical care, and intensive care nursing services."
+          },
+          "nursing-aged-care": {
+            "title": "Nursing (Aged Care)",
+            "type": "boolean",
+            "description": "Filter jobs providing nursing care to elderly patients in residential or community settings."
+          },
+          "nursing-community-maternal-child-health": {
+            "title": "Nursing (Community, Maternal & Child Health)",
+            "type": "boolean",
+            "description": "Search for jobs promoting community health, maternal care, and child health through nursing services."
+          },
+          "nursing-educators-facilitators": {
+            "title": "Nursing (Educators & Facilitators)",
+            "type": "boolean",
+            "description": "Filter jobs teaching and training nursing students, professionals, and healthcare staff."
+          },
+          "nursing-general-medical-surgical": {
+            "title": "Nursing (General, Medical, Surgical)",
+            "type": "boolean",
+            "description": "Search for jobs providing general nursing care in medical and surgical settings."
+          },
+          "nursing-high-acuity": {
+            "title": "Nursing (High Acuity)",
+            "type": "boolean",
+            "description": "Filter jobs providing intensive nursing care to critically ill patients."
+          },
+          "nursing-management": {
+            "title": "Nursing Management",
+            "type": "boolean",
+            "description": "Search for jobs overseeing nursing operations, including staffing, policy, and quality improvement."
+          },
+          "nursing-midwifery-neo-natal-scn-nicu": {
+            "title": "Nursing (Midwifery, Neo-Natal, SCN, NICU)",
+            "type": "boolean",
+            "description": "Filter jobs providing nursing care to newborns, expectant mothers, and critically ill infants."
+          },
+          "nursing-paediatric-picu": {
+            "title": "Nursing (Paediatric, PICU)",
+            "type": "boolean",
+            "description": "Search for jobs providing nursing care to children and critically ill pediatric patients."
+          },
+          "nursing-psych-forensic-correctional-health": {
+            "title": "Nursing (Psych, Forensic, Correctional Health)",
+            "type": "boolean",
+            "description": "Filter jobs providing nursing care to patients with mental health issues, forensic patients, or those in correctional facilities."
+          },
+          "nursing-theatre-recovery": {
+            "title": "Nursing (Theatre & Recovery)",
+            "type": "boolean",
+            "description": "Search for jobs providing nursing care in operating theatres and recovery rooms."
+          },
+          "optical": {
+            "title": "Optical",
+            "type": "boolean",
+            "description": "Filter jobs related to eye care, including optometry, opticianry, and vision therapy."
+          },
+          "pathology": {
+            "title": "Pathology",
+            "type": "boolean",
+            "description": "Filter jobs analyzing tissues, cells, and bodily fluids to diagnose diseases and develop treatments."
+          },
+          "pharmaceuticals-medical-devices": {
+            "title": "Pharmaceuticals & Medical Devices",
+            "type": "boolean",
+            "description": "Search for jobs developing, manufacturing, and distributing medications and medical equipment."
+          },
+          "pharmacy": {
+            "title": "Pharmacy",
+            "type": "boolean",
+            "description": "Filter jobs dispensing medications, advising patients, and providing pharmaceutical services."
+          },
+          "physiotherapy-ot-rehabilitation": {
+            "title": "Physiotherapy, OT & Rehabilitation",
+            "type": "boolean",
+            "description": "Search for jobs helping patients recover from injuries or illnesses through physical therapy and rehabilitation."
+          },
+          "psychology-counselling-social-work": {
+            "title": "Psychology, Counselling & Social Work",
+            "type": "boolean",
+            "description": "Filter jobs providing mental health services, counseling, and social support to individuals and communities."
+          },
+          "residents-registrars": {
+            "title": "Residents & Registrars",
+            "type": "boolean",
+            "description": "Search for medical residency and registrar positions for postgraduate training."
+          },
+          "healthcare-medical-sales": {
+            "title": "Sales",
+            "type": "boolean",
+            "description": "Filter jobs selling medical equipment, pharmaceuticals, or healthcare services."
+          },
+          "speech-therapy": {
+            "title": "Speech Therapy",
+            "type": "boolean",
+            "description": "Search for jobs helping individuals with communication disorders through speech and language therapy."
+          },
+          "healthcare-medical-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter healthcare and medical jobs that don't fit specific categories."
+          },
+          "hospitality-tourism": {
+            "title": "All Hospitality Subclasses",
+            "type": "boolean",
+            "description": "Include all hospitality and tourism subcategories."
+          },
+          "airlines": {
+            "title": "Airlines",
+            "type": "boolean",
+            "description": "Search for jobs in air transportation, including flight operations, customer service, and ground handling."
+          },
+          "bar-beverage-staff": {
+            "title": "Bar & Beverage Staff",
+            "type": "boolean",
+            "description": "Search for jobs serving drinks and providing customer service in bars, restaurants, and hotels."
+          },
+          "chefs-cooks": {
+            "title": "Chefs & Cooks",
+            "type": "boolean",
+            "description": "Filter jobs preparing and cooking food in restaurants, cafes, hotels, and other food service establishments."
+          },
+          "front-office-guest-services": {
+            "title": "Front Office & Guest Services",
+            "type": "boolean",
+            "description": "Search for jobs providing customer service, reception, and concierge services in hotels and resorts."
+          },
+          "gaming": {
+            "title": "Gaming",
+            "type": "boolean",
+            "description": "Filter jobs in casinos, gaming venues, or online gaming platforms, including dealers, managers, and support staff."
+          },
+          "housekeeping": {
+            "title": "Housekeeping",
+            "type": "boolean",
+            "description": "Search for jobs maintaining cleanliness and organization in hotels, resorts, and other accommodations."
+          },
+          "kitchen-sandwich-hands": {
+            "title": "Kitchen & Sandwich Hands",
+            "type": "boolean",
+            "description": "Filter jobs assisting chefs, preparing food, and maintaining kitchen operations."
+          },
+          "hospitality-tourism-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Search for leadership roles overseeing hospitality and tourism operations, including hotels, restaurants, and resorts."
+          },
+          "reservations": {
+            "title": "Reservations",
+            "type": "boolean",
+            "description": "Filter jobs handling bookings, cancellations, and customer inquiries for hotels, airlines, and travel agencies."
+          },
+          "tour-guides": {
+            "title": "Tour Guides",
+            "type": "boolean",
+            "description": "Search for jobs leading groups of travelers, providing information, and ensuring memorable experiences."
+          },
+          "travel-agents-consultants": {
+            "title": "Travel Agents & Consultants",
+            "type": "boolean",
+            "description": "Filter jobs planning and booking travel itineraries for individuals, groups, and corporate clients."
+          },
+          "waiting-staff": {
+            "title": "Waiting Staff",
+            "type": "boolean",
+            "description": "Search for jobs serving food and beverages in restaurants, cafes, and hotels."
+          },
+          "hospitality-tourism-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter hospitality and tourism jobs that don't fit specific categories."
+          },
+          "human-resources-recruitment": {
+            "title": "All Human Resources Recruitment Subclasses",
+            "type": "boolean",
+            "description": "Include all human resources and recruitment subcategories."
+          },
+          "human-resources-recruitment-consulting-generalist-hr": {
+            "title": "Consulting (Generalist, HR)",
+            "type": "boolean",
+            "description": "Search for HR consulting jobs providing strategic advice on recruitment, talent management, and organizational development."
+          },
+          "industrial-employee-relations": {
+            "title": "Industrial & Employee Relations",
+            "type": "boolean",
+            "description": "Filter jobs managing workplace relationships, negotiations, and conflict resolution."
+          },
+          "management-agency": {
+            "title": "Management (Agency)",
+            "type": "boolean",
+            "description": "Search for leadership roles in recruitment agencies, overseeing client relationships and talent acquisition."
+          },
+          "management-internal": {
+            "title": "Management (Internal)",
+            "type": "boolean",
+            "description": "Filter jobs leading HR teams within organizations, focusing on talent development and strategic workforce planning."
+          },
+          "occupational-health-safety": {
+            "title": "Occupational Health & Safety",
+            "type": "boolean",
+            "description": "Search for jobs ensuring workplace safety, implementing health programs, and reducing occupational risks."
+          },
+          "organisational-development": {
+            "title": "Organisational Development",
+            "type": "boolean",
+            "description": "Filter jobs designing and implementing organizational improvement strategies, enhancing performance and efficiency."
+          },
+          "recruitment-agency": {
+            "title": "Recruitment (Agency)",
+            "type": "boolean",
+            "description": "Search for jobs in recruitment agencies, matching candidates with client vacancies."
+          },
+          "recruitment-internal": {
+            "title": "Recruitment (Internal)",
+            "type": "boolean",
+            "description": "Filter jobs managing internal recruitment processes, sourcing and hiring talent within organizations."
+          },
+          "remuneration-benefits": {
+            "title": "Remuneration & Benefits",
+            "type": "boolean",
+            "description": "Search for jobs designing and administering compensation, benefits, and rewards programs."
+          },
+          "training-development": {
+            "title": "Training & Development",
+            "type": "boolean",
+            "description": "Filter jobs creating and delivering employee training programs, enhancing skills and performance."
+          },
+          "human-resources-recruitment-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter human resources and recruitment jobs that don't fit specific categories."
+          },
+          "information-communication-technology": {
+            "title": "All Information Communication Technology Subclasses",
+            "type": "boolean",
+            "description": "Include all information communication technology subcategories."
+          },
+          "architects": {
+            "title": "Architects",
+            "type": "boolean",
+            "description": "Search for jobs designing software, hardware, and network architectures."
+          },
+          "business-systems-analysts": {
+            "title": "Business Systems Analysts",
+            "type": "boolean",
+            "description": "Filter jobs analyzing business needs and implementing technology solutions."
+          },
+          "computer-operators": {
+            "title": "Computer Operators",
+            "type": "boolean",
+            "description": "Search for jobs managing computer systems, monitoring performance, and ensuring uptime."
+          },
+          "consultants": {
+            "title": "Consultants",
+            "type": "boolean",
+            "description": "Filter jobs providing expert IT advice, strategy, and guidance to organizations."
+          },
+          "database-development-administration": {
+            "title": "Database Development & Administration",
+            "type": "boolean",
+            "description": "Search for jobs designing, implementing, and maintaining databases."
+          },
+          "developers-programmers": {
+            "title": "Developers & Programmers",
+            "type": "boolean",
+            "description": "Search for jobs designing, coding, and testing software applications and systems."
+          },
+          "engineering-hardware": {
+            "title": "Engineering (Hardware)",
+            "type": "boolean",
+            "description": "Filter jobs designing, developing, and testing computer hardware components."
+          },
+          "engineering-network": {
+            "title": "Engineering (Network)",
+            "type": "boolean",
+            "description": "Search for jobs designing, implementing, and maintaining computer networks and infrastructure."
+          },
+          "engineering-software": {
+            "title": "Engineering (Software)",
+            "type": "boolean",
+            "description": "Filter jobs developing, testing, and maintaining software applications and systems."
+          },
+          "help-desk-it-support": {
+            "title": "Help Desk & IT Support",
+            "type": "boolean",
+            "description": "Search for jobs providing technical assistance and support to users."
+          },
+          "information-communication-technology-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing IT operations, strategy, and teams."
+          },
+          "networks-systems-administration": {
+            "title": "Networks & Systems Administration",
+            "type": "boolean",
+            "description": "Search for jobs managing and maintaining computer networks, systems, and infrastructure."
+          },
+          "information-communication-technology-product-management-development": {
+            "title": "Product Management & Development",
+            "type": "boolean",
+            "description": "Filter jobs overseeing the development, launch, and maintenance of IT products."
+          },
+          "programme-project-management": {
+            "title": "Programme & Project Management",
+            "type": "boolean",
+            "description": "Search for jobs planning, coordinating, and delivering IT projects and programs."
+          },
+          "sales-pre-post": {
+            "title": "Sales (Pre & Post)",
+            "type": "boolean",
+            "description": "Filter jobs selling IT products or services, including pre-sales consulting and post-sales support."
+          },
+          "security": {
+            "title": "Security",
+            "type": "boolean",
+            "description": "Search for jobs protecting computer systems, networks, and data from cyber threats."
+          },
+          "team-leaders": {
+            "title": "Team Leaders",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing IT teams, projects, or departments."
+          },
+          "technical-writing": {
+            "title": "Technical Writing",
+            "type": "boolean",
+            "description": "Search for jobs creating user manuals, guides, and documentation for IT products and services."
+          },
+          "telecommunications": {
+            "title": "Telecommunications",
+            "type": "boolean",
+            "description": "Filter jobs in phone, internet, and data communication services."
+          },
+          "testing-quality-assurance": {
+            "title": "Testing & Quality Assurance",
+            "type": "boolean",
+            "description": "Search for jobs ensuring software and system quality through testing and validation."
+          },
+          "web-development-production": {
+            "title": "Web Development & Production",
+            "type": "boolean",
+            "description": "Filter jobs designing, building, and maintaining websites and web applications."
+          },
+          "information-communication-technology-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter information communication technology jobs that don't fit specific categories."
+          },
+          "insurance-superannuation": {
+            "title": "All Insurance Superannuation Subclasses",
+            "type": "boolean",
+            "description": "Include all insurance and superannuation subcategories."
+          },
+          "actuarial": {
+            "title": "Actuarial",
+            "type": "boolean",
+            "description": "Search for jobs analyzing statistical data to assess insurance risks and policy pricing."
+          },
+          "assessment": {
+            "title": "Assessment",
+            "type": "boolean",
+            "description": "Filter jobs evaluating insurance claims and determining liability."
+          },
+          "brokerage": {
+            "title": "Brokerage",
+            "type": "boolean",
+            "description": "Search for jobs connecting clients with insurance products and services."
+          },
+          "claims": {
+            "title": "Claims",
+            "type": "boolean",
+            "description": "Filter jobs processing and resolving insurance claims."
+          },
+          "fund-administration": {
+            "title": "Fund Administration",
+            "type": "boolean",
+            "description": "Search for jobs managing and administering superannuation funds."
+          },
+          "insurance-superannuation-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing insurance and superannuation operations."
+          },
+          "risk-consulting": {
+            "title": "Risk Consulting",
+            "type": "boolean",
+            "description": "Search for jobs advising clients on risk management and mitigation strategies."
+          },
+          "superannuation": {
+            "title": "Superannuation",
+            "type": "boolean",
+            "description": "Filter jobs managing and administering retirement benefits."
+          },
+          "underwriting": {
+            "title": "Underwriting",
+            "type": "boolean",
+            "description": "Search for jobs evaluating and assuming insurance risks."
+          },
+          "workers-compensation": {
+            "title": "Workers Compensation",
+            "type": "boolean",
+            "description": "Filter jobs managing workplace injury claims and benefits."
+          },
+          "insurance-superannuation-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter insurance and superannuation jobs that don't fit specific categories."
+          },
+          "legal": {
+            "title": "All Legal Subclasses",
+            "type": "boolean",
+            "description": "Include all legal subcategories."
+          },
+          "banking-finance-law": {
+            "title": "Banking & Finance Law",
+            "type": "boolean",
+            "description": "Search for jobs advising on banking, finance, and securities law."
+          },
+          "construction-law": {
+            "title": "Construction Law",
+            "type": "boolean",
+            "description": "Filter jobs advising on construction contracts, disputes, and regulations."
+          },
+          "corporate-commercial-law": {
+            "title": "Corporate & Commercial Law",
+            "type": "boolean",
+            "description": "Filter jobs advising on business structures, mergers, acquisitions, and commercial transactions."
+          },
+          "criminal-civil-law": {
+            "title": "Criminal & Civil Law",
+            "type": "boolean",
+            "description": "Search for jobs representing clients in criminal and civil courts, including trials and appeals."
+          },
+          "environment-planning-law": {
+            "title": "Environment & Planning Law",
+            "type": "boolean",
+            "description": "Filter jobs advising on environmental regulations, land use, and urban planning."
+          },
+          "family-law": {
+            "title": "Family Law",
+            "type": "boolean",
+            "description": "Search for jobs handling divorce, child custody, and other family-related legal issues."
+          },
+          "generalists-in-house": {
+            "title": "Generalists (In-House)",
+            "type": "boolean",
+            "description": "Filter in-house counsel jobs handling various legal matters for organizations."
+          },
+          "generalists-law-firm": {
+            "title": "Generalists (Law Firm)",
+            "type": "boolean",
+            "description": "Search for law firm jobs handling diverse legal cases and clients."
+          },
+          "industrial-relations-employment-law": {
+            "title": "Industrial Relations & Employment Law",
+            "type": "boolean",
+            "description": "Filter jobs advising on workplace laws, labor disputes, and employee relations."
+          },
+          "insurance-superannuation-law": {
+            "title": "Insurance & Superannuation Law",
+            "type": "boolean",
+            "description": "Search for jobs advising on insurance policies, claims, and superannuation funds."
+          },
+          "intellectual-property-law": {
+            "title": "Intellectual Property Law",
+            "type": "boolean",
+            "description": "Filter jobs protecting patents, trademarks, copyrights, and trade secrets."
+          },
+          "law-clerks-paralegals": {
+            "title": "Law Clerks & Paralegals",
+            "type": "boolean",
+            "description": "Search for support roles assisting lawyers with research, documentation, and case management."
+          },
+          "legal-practice-management": {
+            "title": "Legal Practice Management",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing law firm operations, finance, and administration."
+          },
+          "legal-secretaries": {
+            "title": "Legal Secretaries",
+            "type": "boolean",
+            "description": "Search for administrative roles supporting lawyers with scheduling, documents, and correspondence."
+          },
+          "litigation-dispute-resolution": {
+            "title": "Litigation & Dispute Resolution",
+            "type": "boolean",
+            "description": "Filter jobs representing clients in court, arbitration, and mediation proceedings."
+          },
+          "personal-injury-law": {
+            "title": "Personal Injury Law",
+            "type": "boolean",
+            "description": "Search for jobs handling compensation claims for accidents, injuries, and negligence."
+          },
+          "property-law": {
+            "title": "Property Law",
+            "type": "boolean",
+            "description": "Filter jobs advising on property transactions, conveyancing, and land development."
+          },
+          "tax-law": {
+            "title": "Tax Law",
+            "type": "boolean",
+            "description": "Search for jobs advising on tax planning, compliance, and controversy resolution."
+          },
+          "legal-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter legal jobs that don't fit specific categories."
+          },
+          "manufacturing-transport-logistics": {
+            "title": "All Manufacturing Transport Logistics Subclasses",
+            "type": "boolean",
+            "description": "Include all manufacturing, transport, and logistics subcategories."
+          },
+          "manufacturing-transport-logistics-analysis-reporting": {
+            "title": "Analysis & Reporting",
+            "type": "boolean",
+            "description": "Filter jobs analyzing data and generating reports for manufacturing and logistics operations."
+          },
+          "assembly-process-work": {
+            "title": "Assembly & Process Work",
+            "type": "boolean",
+            "description": "Search for jobs involving assembly, production lines, and manufacturing processes."
+          },
+          "aviation-services": {
+            "title": "Aviation Services",
+            "type": "boolean",
+            "description": "Filter jobs in air transportation, including flight operations and maintenance."
+          },
+          "couriers-drivers-postal-services": {
+            "title": "Couriers, Drivers & Postal Services",
+            "type": "boolean",
+            "description": "Search for jobs delivering packages, documents, and mail."
+          },
+          "fleet-management": {
+            "title": "Fleet Management",
+            "type": "boolean",
+            "description": "Filter jobs overseeing vehicle maintenance, routing, and logistics."
+          },
+          "freight-cargo-forwarding": {
+            "title": "Freight & Cargo Forwarding",
+            "type": "boolean",
+            "description": "Search for jobs coordinating shipping, warehousing, and transportation of goods."
+          },
+          "import-export-customs": {
+            "title": "Import, Export & Customs",
+            "type": "boolean",
+            "description": "Filter jobs handling international trade, customs compliance, and regulatory affairs."
+          },
+          "machine-operators": {
+            "title": "Machine Operators",
+            "type": "boolean",
+            "description": "Search for jobs operating manufacturing equipment, machinery, and tools."
+          },
+          "manufacturing-transport-logistics-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing manufacturing, transport, and logistics operations."
+          },
+          "pattern-makers-garment-technicians": {
+            "title": "Pattern Makers & Garment Technicians",
+            "type": "boolean",
+            "description": "Search for jobs designing and developing textile patterns and garments."
+          },
+          "pickers-packers": {
+            "title": "Pickers & Packers",
+            "type": "boolean",
+            "description": "Filter jobs involving order fulfillment, packaging, and shipping."
+          },
+          "production-planning-scheduling": {
+            "title": "Production Planning & Scheduling",
+            "type": "boolean",
+            "description": "Search for jobs coordinating production timelines, resource allocation, and supply chain management."
+          },
+          "public-transport-taxi-services": {
+            "title": "Public Transport & Taxi Services",
+            "type": "boolean",
+            "description": "Filter jobs driving or managing public transportation, taxis, or ride-sharing services."
+          },
+          "purchasing-procurement-inventory": {
+            "title": "Purchasing, Procurement & Inventory",
+            "type": "boolean",
+            "description": "Search for jobs managing supply chain, procurement, and inventory management."
+          },
+          "manufacturing-transport-logistics-quality-assurance-control": {
+            "title": "Quality Assurance & Control",
+            "type": "boolean",
+            "description": "Filter jobs ensuring product quality, testing, and compliance in manufacturing and logistics."
+          },
+          "rail-maritime-transport": {
+            "title": "Rail & Maritime Transport",
+            "type": "boolean",
+            "description": "Filter jobs in rail and maritime transportation, including operations and maintenance."
+          },
+          "road-transport": {
+            "title": "Road Transport",
+            "type": "boolean",
+            "description": "Search for jobs in trucking, logistics, and road transportation services."
+          },
+          "team-leaders-supervisors": {
+            "title": "Team Leaders & Supervisors",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing teams in manufacturing, transport, and logistics."
+          },
+          "warehousing-storage-distribution": {
+            "title": "Warehousing, Storage & Distribution",
+            "type": "boolean",
+            "description": "Search for jobs managing inventory, storage, and distribution operations."
+          },
+          "manufacturing-transport-logistics-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter manufacturing, transport, and logistics jobs that don't fit specific categories."
+          },
+          "marketing-communications": {
+            "title": "All Marketing Communications Subclasses",
+            "type": "boolean",
+            "description": "Include all marketing communications subcategories."
+          },
+          "brand-management": {
+            "title": "Brand Management",
+            "type": "boolean",
+            "description": "Filter jobs developing and maintaining brand identity and strategy."
+          },
+          "digital-search-marketing": {
+            "title": "Digital Search Marketing",
+            "type": "boolean",
+            "description": "Search for jobs in online marketing, SEO, and paid advertising."
+          },
+          "direct-marketing-crm": {
+            "title": "Direct Marketing & CRM",
+            "type": "boolean",
+            "description": "Filter jobs managing customer relationships and direct marketing campaigns."
+          },
+          "marketing-communications-event-management": {
+            "title": "Event Management",
+            "type": "boolean",
+            "description": "Search for jobs planning and executing marketing events and conferences."
+          },
+          "internal-communications": {
+            "title": "Internal Communications",
+            "type": "boolean",
+            "description": "Filter jobs managing employee engagement and internal messaging."
+          },
+          "marketing-communications-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing marketing communications teams."
+          },
+          "market-research-analysis": {
+            "title": "Market Research & Analysis",
+            "type": "boolean",
+            "description": "Search for jobs analyzing market trends and consumer behavior."
+          },
+          "marketing-assistants-coordinators": {
+            "title": "Marketing Assistants & Coordinators",
+            "type": "boolean",
+            "description": "Filter entry-level marketing roles supporting campaigns and projects."
+          },
+          "marketing-communications-marketing-communications": {
+            "title": "Marketing Communications",
+            "type": "boolean",
+            "description": "Search for jobs creating and disseminating marketing messages."
+          },
+          "marketing-communications-product-management-development": {
+            "title": "Product Management & Development",
+            "type": "boolean",
+            "description": "Filter jobs managing product launches and development."
+          },
+          "public-relations-corporate-affairs": {
+            "title": "Public Relations & Corporate Affairs",
+            "type": "boolean",
+            "description": "Search for jobs managing company reputation and media relations."
+          },
+          "trade-marketing": {
+            "title": "Trade Marketing",
+            "type": "boolean",
+            "description": "Filter jobs promoting products to wholesalers, retailers, and distributors."
+          },
+          "marketing-communications-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter marketing communications jobs that don't fit specific categories."
+          },
+          "mining-resources-energy": {
+            "title": "All Mining Resources Energy Subclasses",
+            "type": "boolean",
+            "description": "Include all mining, resources, and energy subcategories."
+          },
+          "mining-resources-energy-analysis-reporting": {
+            "title": "Analysis & Reporting",
+            "type": "boolean",
+            "description": "Filter jobs analyzing data and generating reports for mining, resources, and energy operations."
+          },
+          "mining-resources-energy-health-safety-environment": {
+            "title": "Health, Safety & Environment",
+            "type": "boolean",
+            "description": "Search for jobs ensuring safe and sustainable practices in mining, resources, and energy."
+          },
+          "mining-resources-energy-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing mining, resources, and energy operations."
+          },
+          "mining-drill-blast": {
+            "title": "Mining Drill & Blast",
+            "type": "boolean",
+            "description": "Search for jobs in drilling and blasting operations for mining."
+          },
+          "mining-engineering-maintenance": {
+            "title": "Mining Engineering & Maintenance",
+            "type": "boolean",
+            "description": "Filter jobs designing, maintaining, and optimizing mining equipment and infrastructure."
+          },
+          "mining-exploration-geoscience": {
+            "title": "Mining Exploration & Geoscience",
+            "type": "boolean",
+            "description": "Search for jobs exploring and analyzing geological data for mining operations."
+          },
+          "mining-operations": {
+            "title": "Mining Operations",
+            "type": "boolean",
+            "description": "Filter jobs managing day-to-day mining activities, including extraction and processing."
+          },
+          "mining-processing": {
+            "title": "Mining Processing",
+            "type": "boolean",
+            "description": "Search for jobs transforming raw materials into refined products."
+          },
+          "natural-resources-water": {
+            "title": "Natural Resources & Water",
+            "type": "boolean",
+            "description": "Filter jobs managing water resources, conservation, and sustainability."
+          },
+          "oil-gas-drilling": {
+            "title": "Oil & Gas Drilling",
+            "type": "boolean",
+            "description": "Search for jobs drilling and extracting oil and gas."
+          },
+          "oil-gas-engineering-maintenance": {
+            "title": "Oil & Gas Engineering & Maintenance",
+            "type": "boolean",
+            "description": "Filter jobs designing, maintaining, and optimizing oil and gas equipment and infrastructure."
+          },
+          "oil-gas-exploration-geoscience": {
+            "title": "Oil & Gas Exploration & Geoscience",
+            "type": "boolean",
+            "description": "Search for jobs exploring and analyzing geological data for oil and gas operations."
+          },
+          "oil-gas-operations": {
+            "title": "Oil & Gas Operations",
+            "type": "boolean",
+            "description": "Filter jobs managing day-to-day oil and gas activities, including extraction and processing."
+          },
+          "oil-gas-production-refinement": {
+            "title": "Oil & Gas Production & Refinement",
+            "type": "boolean",
+            "description": "Search for jobs transforming crude oil and gas into refined products."
+          },
+          "power-generation-distribution": {
+            "title": "Power Generation & Distribution",
+            "type": "boolean",
+            "description": "Filter jobs generating and distributing electricity."
+          },
+          "mining-resources-energy-surveying": {
+            "title": "Surveying",
+            "type": "boolean",
+            "description": "Search for jobs conducting geological surveys and mapping for mining and energy operations."
+          },
+          "mining-resources-energy-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter mining, resources, and energy jobs that don't fit specific categories."
+          },
+          "real-estate-property": {
+            "title": "All Real Estate Property Subclasses",
+            "type": "boolean",
+            "description": "Include all real estate and property subcategories."
+          },
+          "real-estate-property-administration": {
+            "title": "Administration",
+            "type": "boolean",
+            "description": "Filter administrative roles in real estate and property management."
+          },
+          "real-estate-property-analysts": {
+            "title": "Analysts",
+            "type": "boolean",
+            "description": "Search for jobs analyzing market trends and property data."
+          },
+          "body-corporate-facilities-management": {
+            "title": "Body Corporate & Facilities Management",
+            "type": "boolean",
+            "description": "Filter jobs managing shared facilities and amenities."
+          },
+          "commercial-sales-leasing-property-mgmt": {
+            "title": "Commercial Sales & Leasing / Property Management",
+            "type": "boolean",
+            "description": "Search for jobs buying, selling, leasing, and managing commercial properties."
+          },
+          "residential-leasing-property-management": {
+            "title": "Residential Leasing & Property Management",
+            "type": "boolean",
+            "description": "Filter jobs managing residential rentals and properties."
+          },
+          "residential-sales": {
+            "title": "Residential Sales",
+            "type": "boolean",
+            "description": "Search for jobs buying and selling residential properties."
+          },
+          "retail-property-development": {
+            "title": "Retail Property Development",
+            "type": "boolean",
+            "description": "Filter jobs developing and managing retail properties."
+          },
+          "valuation": {
+            "title": "Valuation",
+            "type": "boolean",
+            "description": "Search for jobs determining property values."
+          },
+          "real-estate-property-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter real estate and property jobs that don't fit specific categories."
+          },
+          "retail-consumer-products": {
+            "title": "All Retail Consumer Products Subclasses",
+            "type": "boolean",
+            "description": "Include all retail and consumer products subcategories."
+          },
+          "buying": {
+            "title": "Buying",
+            "type": "boolean",
+            "description": "Filter jobs purchasing products for retail sale."
+          },
+          "management-area-multi-site": {
+            "title": "Management Area (Multi-Site)",
+            "type": "boolean",
+            "description": "Search for jobs managing multiple retail locations."
+          },
+          "management-department-assistant": {
+            "title": "Management Department Assistant",
+            "type": "boolean",
+            "description": "Filter assistant roles supporting retail department managers."
+          },
+          "management-store": {
+            "title": "Management Store",
+            "type": "boolean",
+            "description": "Search for jobs managing retail stores."
+          },
+          "merchandisers": {
+            "title": "Merchandisers",
+            "type": "boolean",
+            "description": "Filter jobs planning and executing product displays and promotions."
+          },
+          "planning": {
+            "title": "Planning",
+            "type": "boolean",
+            "description": "Search for jobs analyzing sales data and planning retail strategies."
+          },
+          "retail-assistants": {
+            "title": "Retail Assistants",
+            "type": "boolean",
+            "description": "Filter entry-level retail roles assisting customers and supporting sales."
+          },
+          "retail-consumer-products-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter retail and consumer products jobs that don't fit specific categories."
+          },
+          "sales": {
+            "title": "All Sales Subclasses",
+            "type": "boolean",
+            "description": "Include all sales subcategories."
+          },
+          "sales-account-relationship-management": {
+            "title": "Account Relationship Management",
+            "type": "boolean",
+            "description": "Filter jobs managing existing client relationships and sales growth."
+          },
+          "sales-analysis-reporting": {
+            "title": "Analysis & Reporting",
+            "type": "boolean",
+            "description": "Search for jobs analyzing sales data and generating reports."
+          },
+          "sales-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing sales teams."
+          },
+          "new-business-development": {
+            "title": "New Business Development",
+            "type": "boolean",
+            "description": "Search for jobs identifying and pursuing new sales opportunities."
+          },
+          "sales-coordinators": {
+            "title": "Sales Coordinators",
+            "type": "boolean",
+            "description": "Filter administrative roles supporting sales teams."
+          },
+          "sales-representatives-consultants": {
+            "title": "Sales Representatives / Consultants",
+            "type": "boolean",
+            "description": "Search for jobs directly engaging with customers and driving sales."
+          },
+          "sales-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter sales jobs that don't fit specific categories."
+          },
+          "science-technology": {
+            "title": "All Science Technology Subclasses",
+            "type": "boolean",
+            "description": "Include all science and technology subcategories."
+          },
+          "biological-biomedical-sciences": {
+            "title": "Biological & Biomedical Sciences",
+            "type": "boolean",
+            "description": "Filter jobs in biological research, development, and application."
+          },
+          "biotechnology-genetics": {
+            "title": "Biotechnology & Genetics",
+            "type": "boolean",
+            "description": "Search for jobs in genetic research, engineering, and product development."
+          },
+          "chemistry-physics": {
+            "title": "Chemistry & Physics",
+            "type": "boolean",
+            "description": "Filter jobs in chemical and physical research, development, and application."
+          },
+          "environmental-earth-geosciences": {
+            "title": "Environmental / Earth / Geosciences",
+            "type": "boolean",
+            "description": "Search for jobs in environmental conservation, geology, and earth sciences."
+          },
+          "food-technology-safety": {
+            "title": "Food Technology & Safety",
+            "type": "boolean",
+            "description": "Filter jobs ensuring food quality, safety, and production."
+          },
+          "laboratory-technical-services": {
+            "title": "Laboratory & Technical Services",
+            "type": "boolean",
+            "description": "Search for jobs conducting tests, analyses, and research in laboratory settings."
+          },
+          "materials-sciences": {
+            "title": "Materials Sciences",
+            "type": "boolean",
+            "description": "Filter jobs researching and developing new materials and technologies."
+          },
+          "mathematics-statistics-information-sciences": {
+            "title": "Mathematics / Statistics / Information Sciences",
+            "type": "boolean",
+            "description": "Filter jobs applying mathematical, statistical, and informational sciences."
+          },
+          "modelling-simulation": {
+            "title": "Modelling & Simulation",
+            "type": "boolean",
+            "description": "Search for jobs creating models and simulations for analysis and prediction."
+          },
+          "science-technology-quality-assurance-control": {
+            "title": "Quality Assurance & Control",
+            "type": "boolean",
+            "description": "Filter jobs ensuring quality standards in scientific and technological fields."
+          },
+          "science-technology-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter science and technology jobs that don't fit specific categories."
+          },
+          "sport-recreation": {
+            "title": "All Sport Recreation Subclasses",
+            "type": "boolean",
+            "description": "Include all sport and recreation subcategories."
+          },
+          "coaching-instruction": {
+            "title": "Coaching & Instruction",
+            "type": "boolean",
+            "description": "Filter jobs teaching and training individuals or teams in sports and fitness."
+          },
+          "fitness-personal-training": {
+            "title": "Fitness & Personal Training",
+            "type": "boolean",
+            "description": "Search for jobs leading fitness classes or training individuals."
+          },
+          "sport-recreation-management": {
+            "title": "Management",
+            "type": "boolean",
+            "description": "Filter leadership roles overseeing sports and recreation programs."
+          },
+          "sport-recreation-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter sport and recreation jobs that don't fit specific categories."
+          },
+          "trades-services": {
+            "title": "All Trades Services Subclasses",
+            "type": "boolean",
+            "description": "Include all trades and services subcategories."
+          },
+          "air-conditioning-refrigeration": {
+            "title": "Air Conditioning & Refrigeration",
+            "type": "boolean",
+            "description": "Filter jobs installing, maintaining, and repairing HVAC and refrigeration systems."
+          },
+          "automotive-trades": {
+            "title": "Automotive Trades",
+            "type": "boolean",
+            "description": "Search for jobs repairing and maintaining vehicles."
+          },
+          "bakers-pastry-chefs": {
+            "title": "Bakers & Pastry Chefs",
+            "type": "boolean",
+            "description": "Filter jobs preparing baked goods and pastries."
+          },
+          "building-trades": {
+            "title": "Building Trades",
+            "type": "boolean",
+            "description": "Search for jobs in construction, carpentry, and masonry."
+          },
+          "butchers": {
+            "title": "Butchers",
+            "type": "boolean",
+            "description": "Filter jobs cutting, processing, and selling meat products."
+          },
+          "carpentry-cabinet-making": {
+            "title": "Carpentry & Cabinet Making",
+            "type": "boolean",
+            "description": "Search for jobs building, installing, and repairing cabinets and furniture."
+          },
+          "cleaning-services": {
+            "title": "Cleaning Services",
+            "type": "boolean",
+            "description": "Filter jobs providing cleaning and maintenance services."
+          },
+          "electricians": {
+            "title": "Electricians",
+            "type": "boolean",
+            "description": "Search for jobs installing, maintaining, and repairing electrical systems."
+          },
+          "fitters-turners-machinists": {
+            "title": "Fitters, Turners & Machinists",
+            "type": "boolean",
+            "description": "Filter jobs fabricating, assembling, and repairing machinery and equipment."
+          },
+          "floristry": {
+            "title": "Floristry",
+            "type": "boolean",
+            "description": "Search for jobs creating floral arrangements and managing flower shops."
+          },
+          "gardening-landscaping": {
+            "title": "Gardening & Landscaping",
+            "type": "boolean",
+            "description": "Filter jobs maintaining gardens, parks, and outdoor spaces."
+          },
+          "hair-beauty-services": {
+            "title": "Hair & Beauty Services",
+            "type": "boolean",
+            "description": "Search for jobs providing hair styling, makeup, and beauty treatments."
+          },
+          "labourers": {
+            "title": "Labourers",
+            "type": "boolean",
+            "description": "Filter manual labor jobs assisting tradespeople and construction sites."
+          },
+          "locksmiths": {
+            "title": "Locksmiths",
+            "type": "boolean",
+            "description": "Search for jobs installing, repairing, and maintaining locks and security devices."
+          },
+          "maintenance-handyperson-services": {
+            "title": "Maintenance & Handyperson Services",
+            "type": "boolean",
+            "description": "Filter jobs performing routine maintenance and repairs."
+          },
+          "nannies-babysitters": {
+            "title": "Nannies & Babysitters",
+            "type": "boolean",
+            "description": "Search for childcare jobs providing in-home care."
+          },
+          "painters-sign-writers": {
+            "title": "Painters & Sign Writers",
+            "type": "boolean",
+            "description": "Filter jobs applying paint and coatings, and creating signs."
+          },
+          "plumbers": {
+            "title": "Plumbers",
+            "type": "boolean",
+            "description": "Search for jobs installing, maintaining, and repairing pipes and plumbing systems."
+          },
+          "printing-publishing-services": {
+            "title": "Printing & Publishing Services",
+            "type": "boolean",
+            "description": "Filter jobs producing printed materials and publications."
+          },
+          "security-services": {
+            "title": "Security Services",
+            "type": "boolean",
+            "description": "Search for jobs protecting people, property, and assets."
+          },
+          "tailors-dressmakers": {
+            "title": "Tailors & Dressmakers",
+            "type": "boolean",
+            "description": "Filter jobs creating, altering, and repairing clothing."
+          },
+          "technicians": {
+            "title": "Technicians",
+            "type": "boolean",
+            "description": "Search for jobs repairing and maintaining technical equipment."
+          },
+          "welders-boilermakers": {
+            "title": "Welders & Boilermakers",
+            "type": "boolean",
+            "description": "Filter jobs joining metal parts using heat and pressure."
+          },
+          "trades-services-other": {
+            "title": "Other",
+            "type": "boolean",
+            "description": "Filter trades and services jobs that don't fit specific categories."
+          },
+          "self-employment": {
+            "title": "Self Employment",
+            "type": "boolean",
+            "description": "Include jobs for entrepreneurs and independent contractors."
+          }
+        }
+      },
+      "runsResponseSchema": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "actId": {
+                "type": "string"
+              },
+              "userId": {
+                "type": "string"
+              },
+              "startedAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-01-08T00:00:00.000Z"
+              },
+              "finishedAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-01-08T00:00:00.000Z"
+              },
+              "status": {
+                "type": "string",
+                "example": "READY"
+              },
+              "meta": {
+                "type": "object",
+                "properties": {
+                  "origin": {
+                    "type": "string",
+                    "example": "API"
+                  },
+                  "userAgent": {
+                    "type": "string"
+                  }
+                }
+              },
+              "stats": {
+                "type": "object",
+                "properties": {
+                  "inputBodyLen": {
+                    "type": "integer",
+                    "example": 2000
+                  },
+                  "rebootCount": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "restartCount": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "resurrectCount": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "computeUnits": {
+                    "type": "integer",
+                    "example": 0
+                  }
+                }
+              },
+              "options": {
+                "type": "object",
+                "properties": {
+                  "build": {
+                    "type": "string",
+                    "example": "latest"
+                  },
+                  "timeoutSecs": {
+                    "type": "integer",
+                    "example": 300
+                  },
+                  "memoryMbytes": {
+                    "type": "integer",
+                    "example": 1024
+                  },
+                  "diskMbytes": {
+                    "type": "integer",
+                    "example": 2048
+                  }
+                }
+              },
+              "buildId": {
+                "type": "string"
+              },
+              "defaultKeyValueStoreId": {
+                "type": "string"
+              },
+              "defaultDatasetId": {
+                "type": "string"
+              },
+              "defaultRequestQueueId": {
+                "type": "string"
+              },
+              "buildNumber": {
+                "type": "string",
+                "example": "1.0.0"
+              },
+              "containerUrl": {
+                "type": "string"
+              },
+              "usage": {
+                "type": "object",
+                "properties": {
+                  "ACTOR_COMPUTE_UNITS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "DATASET_READS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "DATASET_WRITES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "KEY_VALUE_STORE_READS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "KEY_VALUE_STORE_WRITES": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "KEY_VALUE_STORE_LISTS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "REQUEST_QUEUE_READS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "REQUEST_QUEUE_WRITES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "DATA_TRANSFER_INTERNAL_GBYTES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "DATA_TRANSFER_EXTERNAL_GBYTES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "PROXY_RESIDENTIAL_TRANSFER_GBYTES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "PROXY_SERPS": {
+                    "type": "integer",
+                    "example": 0
+                  }
+                }
+              },
+              "usageTotalUsd": {
+                "type": "number",
+                "example": 0.00005
+              },
+              "usageUsd": {
+                "type": "object",
+                "properties": {
+                  "ACTOR_COMPUTE_UNITS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "DATASET_READS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "DATASET_WRITES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "KEY_VALUE_STORE_READS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "KEY_VALUE_STORE_WRITES": {
+                    "type": "number",
+                    "example": 0.00005
+                  },
+                  "KEY_VALUE_STORE_LISTS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "REQUEST_QUEUE_READS": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "REQUEST_QUEUE_WRITES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "DATA_TRANSFER_INTERNAL_GBYTES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "DATA_TRANSFER_EXTERNAL_GBYTES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "PROXY_RESIDENTIAL_TRANSFER_GBYTES": {
+                    "type": "integer",
+                    "example": 0
+                  },
+                  "PROXY_SERPS": {
+                    "type": "integer",
+                    "example": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "experienceLevel": "4",
+    "location": "Australia and New Zealand",
+    "proxy": {
+        "useApifyProxy": true,
+        "apifyProxyGroups": [
+            "RESIDENTIAL"
+        ]
+    },
+    "publishedAt": "r86400",
+    "rows": 203,
+    "title": "Software Engineer",
+    "workType": "2"
+}

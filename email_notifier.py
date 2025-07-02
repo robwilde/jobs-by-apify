@@ -1,0 +1,265 @@
+import os
+from typing import List, Dict, Any
+from datetime import datetime
+from postmarker.core import PostmarkClient
+
+
+class EmailNotifier:
+    """Handles email notifications for job matches using Postmark"""
+    
+    def __init__(self):
+        self.email_provider = os.getenv('EMAIL_PROVIDER', 'postmark')
+        self.to_email = os.getenv('EMAIL_ADDRESS')
+        self.from_email = os.getenv('FROM_EMAIL', self.to_email)
+        
+        # Initialize Postmark client
+        self.postmark_token = os.getenv('POSTMARK_API_TOKEN')
+        if self.postmark_token:
+            self.postmark = PostmarkClient(server_token=self.postmark_token)
+        else:
+            self.postmark = None
+    
+    def create_job_summary_html(self, matches: Dict[str, List[Dict[str, Any]]], keywords: List[str]) -> str:
+        """Create HTML email content for job matches"""
+        
+        total_matches = len(matches.get('seek', [])) + len(matches.get('linkedin', []))
+        keywords_str = ', '.join(keywords)
+        
+        html = f"""
+        <html>
+        <head>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                .header {{ background-color: #f0f0f0; padding: 15px; border-radius: 5px; }}
+                .job-section {{ margin: 20px 0; }}
+                .job-item {{ 
+                    border: 1px solid #ddd; 
+                    margin: 10px 0; 
+                    padding: 15px; 
+                    border-radius: 5px; 
+                    background-color: #fafafa;
+                }}
+                .job-title {{ font-weight: bold; color: #2c3e50; }}
+                .job-url {{ color: #3498db; text-decoration: none; }}
+                .job-url:hover {{ text-decoration: underline; }}
+                .platform {{ 
+                    background-color: #3498db; 
+                    color: white; 
+                    padding: 3px 8px; 
+                    border-radius: 3px; 
+                    font-size: 12px;
+                    margin-right: 10px;
+                }}
+                .seek {{ background-color: #e74c3c; }}
+                .linkedin {{ background-color: #0077b5; }}
+                .keywords {{ background-color: #f1c40f; padding: 2px 6px; border-radius: 3px; }}
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>🎯 Job Search Results</h2>
+                <p><strong>Search completed:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+                <p><strong>Keywords searched:</strong> <span class="keywords">{keywords_str}</span></p>
+                <p><strong>Total matches found:</strong> {total_matches}</p>
+            </div>
+        """
+        
+        # Add Seek jobs
+        if matches.get('seek'):
+            html += f"""
+            <div class="job-section">
+                <h3><span class="platform seek">SEEK</span> {len(matches['seek'])} matches</h3>
+            """
+            
+            for job in matches['seek']:
+                job_link = job.get('jobLink', '#')
+                job_title = job.get('title', 'Job Title Not Available')
+                company = job.get('companyName', 'Company Not Available')
+                html += f"""
+                <div class="job-item">
+                    <div class="job-title">{job_title}</div>
+                    <p><strong>Company:</strong> {company}</p>
+                    <p><a href="{job_link}" class="job-url" target="_blank">{job_link}</a></p>
+                </div>
+                """
+            
+            html += "</div>"
+        
+        # Add LinkedIn jobs
+        if matches.get('linkedin'):
+            html += f"""
+            <div class="job-section">
+                <h3><span class="platform linkedin">LINKEDIN</span> {len(matches['linkedin'])} matches</h3>
+            """
+            
+            for job in matches['linkedin']:
+                job_url = job.get('jobUrl', '#')
+                job_title = job.get('title', 'Job Title Not Available')
+                company = job.get('company', 'Company Not Available')
+                
+                html += f"""
+                <div class="job-item">
+                    <div class="job-title">{job_title}</div>
+                    <p><strong>Company:</strong> {company}</p>
+                    <p><a href="{job_url}" class="job-url" target="_blank">{job_url}</a></p>
+                </div>
+                """
+            
+            html += "</div>"
+        
+        if total_matches == 0:
+            html += """
+            <div class="job-section">
+                <p style="text-align: center; color: #7f8c8d; font-style: italic;">
+                    No matching jobs found in this search.
+                </p>
+            </div>
+            """
+        
+        html += """
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #7f8c8d; font-size: 12px;">
+                <p>This email was automatically generated by your Job Search Bot.</p>
+            </div>
+        </body>
+        </html>
+        """
+        
+        return html
+    
+    def create_job_summary_text(self, matches: Dict[str, List[Dict[str, Any]]], keywords: List[str]) -> str:
+        """Create plain text email content for job matches"""
+        
+        total_matches = len(matches.get('seek', [])) + len(matches.get('linkedin', []))
+        keywords_str = ', '.join(keywords)
+        
+        text = f"""🎯 JOB SEARCH RESULTS
+
+Search completed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+Keywords searched: {keywords_str}
+Total matches found: {total_matches}
+
+"""
+        
+        # Add Seek jobs
+        if matches.get('seek'):
+            text += f"SEEK - {len(matches['seek'])} matches:\n"
+            text += "=" * 40 + "\n"
+            
+            for i, job in enumerate(matches['seek'], 1):
+                job_link = job.get('jobLink', '#')
+                job_title = job.get('title', 'Job Title Not Available')
+                company = job.get('companyName', 'Company Not Available')
+                
+                text += f"{i}. {job_title}\n"
+                text += f"   Company: {company}\n"
+                text += f"   URL: {job_link}\n\n"
+            
+            text += "\n"
+        
+        # Add LinkedIn jobs
+        if matches.get('linkedin'):
+            text += f"LINKEDIN - {len(matches['linkedin'])} matches:\n"
+            text += "=" * 40 + "\n"
+            
+            for i, job in enumerate(matches['linkedin'], 1):
+                job_url = job.get('jobUrl', '#')
+                job_title = job.get('title', 'Job Title Not Available')
+                company = job.get('company', 'Company Not Available')
+                
+                text += f"{i}. {job_title}\n"
+                text += f"   Company: {company}\n"
+                text += f"   URL: {job_url}\n\n"
+        
+        if total_matches == 0:
+            text += "No matching jobs found in this search.\n"
+        
+        text += "\n---\nThis email was automatically generated by your Job Search Bot."
+        
+        return text
+    
+    def send_notification(self, matches: Dict[str, List[Dict[str, Any]]], keywords: List[str]) -> bool:
+        """Send email notification with job matches using Postmark"""
+        
+        if not self.postmark:
+            print("❌ Postmark API token not set in .env file")
+            return False
+        
+        total_matches = len(matches.get('seek', [])) + len(matches.get('linkedin', []))
+        
+        # Create email content
+        subject = f"🎯 Job Alert: {total_matches} matches found"
+        html_content = self.create_job_summary_html(matches, keywords)
+        text_content = self.create_job_summary_text(matches, keywords)
+        
+        try:
+            # Send email using Postmark with both HTML and text versions
+            response = self.postmark.emails.send(
+                From=self.from_email,
+                To=self.to_email,
+                Subject=subject,
+                HtmlBody=html_content,
+                TextBody=text_content,
+                MessageStream='outbound'  # Use 'outbound' stream for transactional emails
+            )
+            
+            print(f"✅ Email notification sent successfully via Postmark: {total_matches} matches")
+            print(f"📧 Message ID: {response['MessageID']}")
+            return True
+            
+        except Exception as e:
+            error_msg = str(e)
+            print(f"❌ Failed to send email notification via Postmark: {error_msg}")
+            
+            # Provide helpful guidance for common errors
+            if "not been confirmed as a Sender Signature" in error_msg:
+                print("💡 SOLUTION: Add and verify your From email address in Postmark:")
+                print(f"   1. Go to https://account.postmarkapp.com/servers/{self.postmark_token}/signatures")
+                print(f"   2. Add '{self.from_email}' as a Sender Signature")
+                print("   3. Check your email and confirm the verification link")
+                print("   4. Try the test again")
+            elif "is not a Sender Signature" in error_msg:
+                print("💡 SOLUTION: The From email address is not verified in Postmark.")
+                print("   Either verify it or use a different verified email address.")
+            
+            return False
+    
+    def send_test_email(self) -> bool:
+        """Send a test email to verify configuration"""
+        
+        test_matches = {
+            'seek': [{'jobLink': 'https://www.seek.com.au/test-job'}],
+            'linkedin': [{'jobUrl': 'https://www.linkedin.com/test-job', 'title': 'Test Job', 'company': 'Test Company'}]
+        }
+        
+        test_keywords = ['TEST']
+        
+        print("📧 Sending test email...")
+        return self.send_notification(test_matches, test_keywords)
+    
+    def check_postmark_status(self) -> bool:
+        """Check if Postmark is properly configured"""
+        if not self.postmark:
+            print("❌ Postmark API token not configured")
+            return False
+        
+        try:
+            # Get server information to verify the token
+            server_info = self.postmark.server.get()
+            # Handle both dict and object responses
+            if hasattr(server_info, 'name'):
+                server_name = server_info.name
+                server_id = getattr(server_info, 'id', 'Unknown')
+            elif isinstance(server_info, dict):
+                server_name = server_info.get('Name', 'Unknown')
+                server_id = server_info.get('ID', 'Unknown')
+            else:
+                # Just verify the connection worked
+                server_name = "Connected"
+                server_id = "Verified"
+            
+            print(f"✅ Postmark server configured: {server_name}")
+            print(f"📊 Server ID: {server_id}")
+            return True
+        except Exception as e:
+            print(f"❌ Postmark configuration error: {str(e)}")
+            return False
