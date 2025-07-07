@@ -64,9 +64,9 @@ class ApifyJobScraper:
         
         # Build LinkedIn search parameters from environment
         linkedin_config = {
-            'keywords': [job_title],  # Use keywords array as per guide
+            'title': job_title,  # Use title parameter to match manual searches
             'location': os.getenv('LOCATION', 'Australia and New Zealand'),
-            'maxResults': min(max_results, 1000),  # Use maxResults instead of rows
+            'rows': min(max_results, 1000),  # Use rows parameter as expected by LinkedIn actor
             'proxy': {
                 'useApifyProxy': True,
                 'apifyProxyGroups': ['RESIDENTIAL']

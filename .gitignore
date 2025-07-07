@@ -4,3 +4,6 @@
 /.idea/modules.xml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/.env
+/.aider.tags.cache.v3/cache.db
+/manual/dataset_linkedin-jobs-scraper_2025-06-22_01-50-18-438.json
